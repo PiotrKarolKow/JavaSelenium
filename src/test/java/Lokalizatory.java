@@ -112,8 +112,6 @@ public class Lokalizatory {
         Assert.assertTrue(updatedText.contains("AJAX is not a programming language."));
     }
 
-
-
     @AfterMethod
     public void tearDown() {
         driver.quit();
