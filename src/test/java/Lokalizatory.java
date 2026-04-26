@@ -5,17 +5,21 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.devtools.v145.page.model.WebAppManifest;
 import org.openqa.selenium.support.locators.RelativeLocator;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.Reporter;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.time.Duration;
 import java.util.List;
 
 public class Lokalizatory {
     private WebDriver driver;
+    private WebDriverWait wait;
 
     @BeforeMethod
     public void setUp() {
@@ -23,7 +27,7 @@ public class Lokalizatory {
 //        options.addArguments("--incognito");
 //        options.addArguments("--disable-web-security");
         driver = new ChromeDriver(options);
-        wait = new WebDriverWait(driver,wait)
+        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
     }
 
     @Test
@@ -41,7 +45,7 @@ public class Lokalizatory {
     }
 
     @Test
-    public void loginValidTest()
+    public void loginValid()
     {
         String inputText = "jakis tekst";
         driver.get("http://uitestingplayground.com/sampleapp");
@@ -67,10 +71,9 @@ public class Lokalizatory {
 
     @Test
     public void bookTest() {
-        driver.get("https://books.toscrape.com/catalogue/category/books/romance_8/index.html");
+        driver.get("https://books.toscrape.com");
         driver.findElement(By.linkText("Romance")).click();
-
-        List<WebElement> lista = driver.findElements(By.cssSelector(".product_pod"));
+        List<WebElement> lista = driver.findElements(By.className("product_pod"));
         Assert.assertTrue(lista.size() > 0);
     }
 
@@ -84,17 +87,35 @@ public class Lokalizatory {
     @Test
     public void ajaxTest() {
         driver.get("https://www.w3schools.com/js/js_ajax_intro.asp");
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(By.className());
-        }
         driver.findElement(By.xpath("//button[@type='button']")).click();
         String updatedText = driver.findElement(By.id("demo")).getText();
         Assert.assertTrue(updatedText.contains("AJAX is not a programming language."));
     }
 
-    @AfterMethod(alwaysRun = true)
+    @Test
+    public void ajaxTestt() {
+        driver.get("https://www.w3schools.com/js/js_ajax_intro.asp");
+        try {
+            wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("fast-cmp-iframe")));
+            wait.until(ExpectedConditions.elementToBeClickable(By.className("fast-cmp-button-primary")));
+            driver.findElement(By.className("fast-cmp-button-primary")).click();
+            driver.switchTo().defaultContent();
+        } catch (Exception e) {
+            Reporter.log("Cookies not present");
+        }
+        driver.findElement(By.xpath("//button[@type='button']")).click();
+        wait.until(ExpectedConditions.not(
+                ExpectedConditions.textToBe(By.id("demo"), "Let AJAX change this text")
+        ));
+        String updatedText = driver.findElement(By.id("demo")).getText();
+        Reporter.log(updatedText, true);
+        Assert.assertTrue(updatedText.contains("AJAX is not a programming language."));
+    }
+
+
+
+    @AfterMethod
     public void tearDown() {
         driver.quit();
-
     }
 }
