@@ -1,22 +1,28 @@
-<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-
 <suite name="Suite1" verbose="1">
-    <test name="Kalkulator">
+    <test name="Kalkulator" enabled="false">
         <classes>
             <class name="CalculatorTest"/>
         </classes>
     </test>
-
-    <test name="Test przegldarki">
+    <test name="Test przegladarki" enabled="false">
         <classes>
             <class name="FirstTest"/>
         </classes>
     </test>
-    <test name="Test lokalizatorw">
+    <test name="Lokalizatory test" enabled="false">
         <classes>
             <class name="Lokalizatory"/>
         </classes>
     </test>
+    <test name="Operacje test" enabled="false">
+        <classes>
+            <class name="Operacje"/>
+        </classes>
+    </test>
 
-
+    <test name="Testy Page Object" enabled="true">
+        <classes>
+            <class name="com.saucedemo.tests.LoginTest"/>
+        </classes>
+    </test>
 </suite>
